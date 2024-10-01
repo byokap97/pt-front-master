@@ -9,11 +9,11 @@
             class="elevation-1"
             :loading="dataLoading"
             @update:options="loadData"
-            @click:row="handleClick"
+            v-on="tableOptions"
         >
             <template #top>
-                <v-row>
-                    <v-col cols="12" md="6">
+                <v-row class="pa-2">
+                    <v-col cols="12">
                         <v-text-field
                             v-model="search"
                             append-icon="mdi-magnify"
@@ -23,6 +23,11 @@
                         ></v-text-field>
                     </v-col>
                 </v-row>
+            </template>
+            <template #item.image="{ item }">
+                <v-card rounded>
+                    <v-img :src="item.image" height="32" cover></v-img>
+                </v-card>
             </template>
             <template #item.air_date="{ item }">
                 {{ formatDate(item.air_date) }}
@@ -36,8 +41,9 @@
 
 <script setup lang="ts">
 import { VDataTable } from 'vuetify/lib/components/index.mjs';
-import { ref, watch } from 'vue';
-import dayjs from 'dayjs';
+import { computed, ref, watch } from 'vue';
+import { BasicSearchPayload } from '@/types/store.types';
+import { formatDate } from '@/utils/date.utils';
 
 const props = defineProps<{
     itemsLength: number;
@@ -45,6 +51,7 @@ const props = defineProps<{
     dataLoading: boolean;
     itemsPerPage: number;
     dataHeaders: VDataTable['$props']['headers'];
+    rowClickAble: boolean;
 }>();
 
 const emit = defineEmits(['rowClicked', 'searchEvent', 'loadData']);
@@ -55,20 +62,25 @@ watch(search, (value) => {
     handleSearch({ page: 1, search: value });
 });
 
-const loadData = ({ page}) => {
+const loadData = ({ page }: { page: number; search: string }) => {
     emit('loadData', { page, search: search.value });
 };
 
-const handleSearch = (searchData) => {
+const handleSearch = (searchData: BasicSearchPayload) => {
     emit('searchEvent', searchData);
 };
 
-const handleClick = (event, row) => {
+const handleClick = (event: Event, row: any) => {
     const item = row.item;
     emit('rowClicked', item);
 };
 
-const formatDate = (date: string) => {
-    return dayjs(date, 'MMM D, YYYY').format('DD/MM/YYYY');
-};
+const tableOptions = computed(() => {
+    if (props.rowClickAble) {
+        return {
+            'click:row': handleClick,
+        };
+    }
+    return {};
+});
 </script>
