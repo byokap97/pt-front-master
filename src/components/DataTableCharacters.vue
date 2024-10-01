@@ -28,7 +28,7 @@
                     <v-col cols="12" md="4">
                         <v-select
                             v-model="gender"
-                            :items="['Male', 'Female', 'Genderless', 'unknown']"
+                            :items="['Male', 'Female', 'Genderless', 'Unknown']"
                             label="Gender"
                             outlined
                             shaped
@@ -40,7 +40,7 @@
                     <v-col cols="12" md="4">
                         <v-select
                             v-model="status"
-                            :items="['Alive', 'Dead', 'unknown']"
+                            :items="['Alive', 'Dead', 'Unknown']"
                             label="Status"
                             outlined
                             shaped
