@@ -1,9 +1,11 @@
 <template>
-    <v-navigation-drawer 
-    v-model="drawer" 
-    :location="$vuetify.display.mobile ? 'bottom' : undefined"
-    temporary
-    app>
+    <v-navigation-drawer
+        v-model="drawer"
+        :location="$vuetify.display.mobile ? 'bottom' : undefined"
+        temporary
+        app
+        color="background"
+    >
         <v-list nav>
             <v-list-item
                 prepend-icon="mdi-view-list"
@@ -14,16 +16,17 @@
             <v-list-item
                 prepend-icon="mdi-view-list"
                 title="Characters"
-                :to="{ path: '/Characters' }"
+                :to="{ path: '/characters' }"
             />
         </v-list>
     </v-navigation-drawer>
-    <v-app-bar
-    color="#272b33">
+
+    <v-app-bar color="primary">
         <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-       
-        <v-toolbar-title>Rick & Morty Api</v-toolbar-title>
+        <v-icon>custom:RickFaceIcon</v-icon>
+        <v-toolbar-title color="secondary">Rick & Morty Api</v-toolbar-title>
     </v-app-bar>
+
     <router-view />
 </template>
 
@@ -32,3 +35,9 @@ import { ref } from 'vue';
 
 const drawer = ref(false);
 </script>
+
+<style scoped>
+.v-toolbar__content > .v-toolbar-title {
+    margin-inline-start: 5px;
+}
+</style>

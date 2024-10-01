@@ -8,26 +8,17 @@
                 scrollable
                 fullscreen
             >
-                <v-card class="d-flex flex-column dialog-card">
-                    <!-- Toolbar for Dialog Header -->
-                    <v-toolbar flat dense>
-                        <v-btn
-                            icon
-                            @click="emit('close')"
-                            aria-label="Close Dialog"
-                        >
-                            <v-icon>mdi-close</v-icon>
-                        </v-btn>
+                <v-card class="d-flex flex-column" color="background">
+                    <v-toolbar flat dense color="primary" class="sticky-toolbar">
+                        <v-btn icon="mdi-close" @click="emit('close')"></v-btn>
                         <v-toolbar-title class="ml-3">
-                            {{ props.character.name }}
+                            Character Information
                         </v-toolbar-title>
                         <v-spacer></v-spacer>
                     </v-toolbar>
 
-                    <!-- Main Card Content -->
-                    <v-container fluid>
+                    <v-container>
                         <v-row>
-                            <!-- Character Image -->
                             <v-col cols="12" md="4">
                                 <v-img
                                     :src="props.character.image"
@@ -37,27 +28,29 @@
                                 ></v-img>
                             </v-col>
 
-                            <!-- Character Info -->
                             <v-col cols="12" md="8">
-                                <v-card-title
-                                    >Character Information</v-card-title
-                                >
+                                <v-card-title>{{
+                                    props.character.name
+                                }}</v-card-title>
                                 <v-card-subtitle>
                                     <div>
-                                        Status: {{ props.character.status }}
+                                        <b>Status:</b>
+                                        {{ props.character.status }}
                                     </div>
                                     <div>
-                                        Species: {{ props.character.species }}
+                                        <b> Species: </b>
+                                        {{ props.character.species }}
                                     </div>
                                     <div>
-                                        Gender: {{ props.character.gender }}
+                                        <b> Gender: </b>
+                                        {{ props.character.gender }}
                                     </div>
                                     <div v-if="props.character.type">
-                                        Type: {{ props.character.type }}
+                                        <b> Type: </b>
+                                        {{ props.character.type }}
                                     </div>
                                 </v-card-subtitle>
 
-                                <!-- Location Info -->
                                 <v-card-text class="pt-2">
                                     <strong>Last known location:</strong>
                                     {{ props.character.location.name }}
@@ -66,21 +59,16 @@
                         </v-row>
                     </v-container>
 
-                    <!-- Data Table of Episodes -->
-                    <v-card-text>
-                        <div class="data-table-container">
-                            <data-table-episodes
-                                :itemsLength="episodesStore.total"
-                                :dataItems="episodesStore.filtered"
-                                :dataLoading="episodesStore.loading"
-                                :itemsPerPage="20"
-                                :dataHeaders="headers"
-                                :rowClickAble="false"
-                                @searchEvent="searchEvent"
-                                @loadData="loadData"
-                            ></data-table-episodes>
-                        </div>
-                    </v-card-text>
+                    <data-table-episodes
+                        :itemsLength="episodesStore.total"
+                        :dataItems="episodesStore.filtered"
+                        :dataLoading="episodesStore.loading"
+                        :itemsPerPage="20"
+                        :dataHeaders="headers"
+                        :rowClickAble="false"
+                        @searchEvent="searchEvent"
+                        @loadData="loadData"
+                    ></data-table-episodes>
                 </v-card>
             </v-dialog>
         </div>
@@ -88,7 +76,6 @@
 </template>
 
 <script lang="ts" setup>
-import { formatDate } from '@/utils/date.utils';
 import { Character } from 'rickmortyapi';
 import { BasicSearchPayload } from '@/types/store.types';
 import { headersEpisode } from '@/constants/constants';
@@ -99,7 +86,6 @@ const headers = headersEpisode;
 const episodesStore = useEpisodesStore();
 
 const emit = defineEmits(['close', 'filter']);
-const fDate = formatDate;
 
 const loadData = () => {
     episodesStore.loadEpisodesByCharacter(props.character);
@@ -109,19 +95,6 @@ const searchEvent = ({ search }: BasicSearchPayload) => {
     episodesStore.filterEpisodes({ search });
 };
 
-const formatSeasonEpisode = (input: string): string => {
-    const regex = /^S(\d{2})E(\d{2})$/;
-    const match = input.match(regex);
-
-    if (match) {
-        const season = parseInt(match[1], 10);
-        const episode = parseInt(match[2], 10);
-        return `Season ${season} Episode ${episode}`;
-    } else {
-        return 'Invalid format';
-    }
-};
-
 const props = defineProps<{
     isActive: boolean;
     character: Character;
@@ -129,52 +102,23 @@ const props = defineProps<{
 </script>
 
 <style scoped>
-.dialog-card {
-    height: 100%;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
+.v-card {
+    overflow: auto;
+    background-color: var(--v-theme-background);
+    color: var(--v-theme-on-background);
 }
 
-.data-table-container {
-    flex-grow: 1;
-    overflow-y: auto;
-    max-height: 90%;
+.v-toolbar__title {
+    color: var(--v-theme-secondary);
 }
 
-.v-card-title {
-    font-size: 1.2rem;
-    font-weight: bold;
+.v-btn {
+    color: var(--v-theme-secondary);
 }
 
-.v-card-subtitle {
-    font-size: 1rem;
-    color: rgba(0, 0, 0, 0.7);
-}
-
-.v-card-actions {
-    justify-content: flex-end;
-}
-
-.v-dialog {
-    overflow: hidden;
-}
-
-.v-img {
-    border-radius: 8px;
-}
-
-@media (max-width: 768px) {
-    .v-card-title {
-        font-size: 1rem;
-    }
-
-    .v-card-subtitle {
-        font-size: 0.9rem;
-    }
-
-    .v-img {
-        height: 180px;
-    }
+.sticky-toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
 </style>

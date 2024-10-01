@@ -2,36 +2,36 @@
     <v-container>
         <div class="text-center pa-4">
             <v-dialog
-                @click:outside="$emit('close')"
+                @click:outside="emit('close')"
                 v-model="props.isActive"
                 transition="dialog-bottom-transition"
                 scrollable
                 fullscreen
             >
-                <v-card class="d-flex flex-column dialog-card">
-                    <v-toolbar>
+                <v-card
+                    class="d-flex flex-column"
+                    color="background"
+                >
+                    <v-toolbar flat dense color="primary">
                         <v-btn icon="mdi-close" @click="emit('close')"></v-btn>
 
-                        <v-toolbar-title>
-                            {{ props.episode.name }}</v-toolbar-title
-                        >
+                        <v-toolbar-title> Episode Information </v-toolbar-title>
 
                         <v-spacer></v-spacer>
                     </v-toolbar>
                     <v-card>
-                        <v-card-title class="text-h5 pt-4"
-                            >Episode Information</v-card-title
-                        >
+                        <v-card-title class="text-h5 pt-4">{{
+                            props.episode.name
+                        }}</v-card-title>
                         <v-card-subtitle class="pl-4">
                             <strong>Air Date:</strong>
                             {{ formatDate(props.episode.air_date) }}
                         </v-card-subtitle>
                         <v-card-subtitle class="pl-4">
-                            <strong>Season/Episode:</strong>
                             {{ formatSeasonEpisode(props.episode.episode) }}
                         </v-card-subtitle>
                         <v-card-subtitle class="pl-4">
-                            <strong>Link:</strong>
+                            <strong>Link: </strong>
                             <a :href="props.episode.url" target="_blank">{{
                                 props.episode.url
                             }}</a>
@@ -100,14 +100,17 @@ const props = defineProps<{
 }>();
 </script>
 <style scoped>
-.dialog-card {
-    height: 100%;
-    overflow: hidden;
+.v-card {
+    overflow: auto;
+    background-color: var(--v-theme-background);
+    color: var(--v-theme-on-background);
 }
 
-.data-table-container {
-    flex-grow: 1;
-    overflow-y: auto;
-    max-height: 90%;
+.v-toolbar__title {
+    color: var(--v-theme-secondary);
+}
+
+.v-btn {
+    color: var(--v-theme-secondary);
 }
 </style>

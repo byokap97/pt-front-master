@@ -7,14 +7,13 @@
             :headers="dataHeaders"
             :items="dataItems"
             class="elevation-1"
-            :style="!rowClickAble ? 'cursor: default' : ''"
             :loading="dataLoading"
             @update:options="loadData"
             v-on="tableOptions"
         >
             <template #top>
-                <v-row>
-                    <v-col cols="12" md="6">
+                <v-row class="pa-2">
+                    <v-col cols="12">
                         <v-text-field
                             v-model="search"
                             append-icon="mdi-magnify"

@@ -29,7 +29,6 @@
 <script lang="ts" setup>
 import { useCharactersStore } from '@/store/characters.store';
 import {
-    BasicSearchPayload,
     CharactersSearchPayload,
 } from '@/types/store.types';
 import { headersCharacters } from '@/constants/constants';
